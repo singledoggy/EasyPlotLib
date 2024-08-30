@@ -55,4 +55,3 @@ font.family: sans-serif
 mathtext.fontset : dejavuserif
 
 axes.formatter.use_mathtext : True
-mathtext.fontset : cm

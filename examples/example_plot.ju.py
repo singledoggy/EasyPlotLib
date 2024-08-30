@@ -7,7 +7,8 @@ from cnmaps import get_adm_maps
 nrows, ncols = 1, 2
 figsizes = epl.figsizes("nat2", nrows=nrows, ncols=ncols)
 
-plt.style.use(["science", "no-latex"])
+# plt.style.use(["science", "no-latex"])
+plt.style.use(["nature"])
 plt.rcParams.update(figsizes)
 fig, axs = plt.subplots(nrows=nrows, ncols=ncols, sharex=True, sharey=True)
 
@@ -17,6 +18,33 @@ for n, ax in enumerate(axs.flatten()):
     ax.annotate(**epl.subplot_labels(n, "A"))
 
 plt.savefig("test.png", dpi=300)
+# %%
+plt.rcParams["font.family"]
+# %%
+plt.style.use(["default"])
+
+plt.rcParams["font.sans-serif"]
+# %%
+import matplotlib.pyplot as plt
+
+import EasyPlotLib as epl
+
+nrows, ncols = 1, 1
+figsizes = epl.figsizes("nat2", nrows=nrows, ncols=ncols)
+
+plt.style.use(["science", "nature", "no-latex"])
+plt.rcParams.update(figsizes)
+plt.rcParams.update(
+    {
+        "font.family": "sans-serif",
+        # 'font.sans-serif': ['Helvetica'],
+    }
+)
+
+fig, axs = plt.subplots(nrows=nrows, ncols=ncols, sharex=True, sharey=True)
+
+# for n, ax in enumerate(axs.flatten()):
+#       ax.annotate(**epl.subplot_labels(n, "a",fontsize=12))
 # %%
 
 nrows, ncols = 1, 2
