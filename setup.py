@@ -26,7 +26,10 @@ setuptools.setup(
     url="https://github.com/yourusername/EasyPlotLib",
     packages=setuptools.find_packages(),
     package_data={
-        "EasyPlotLib": ["styles/**/*.mplstyle"],
+        "EasyPlotLib": [
+            "styles/**/*.mplstyle",
+            "fonts/*.*",
+        ],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
