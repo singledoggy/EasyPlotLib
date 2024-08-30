@@ -21,8 +21,6 @@ plt.savefig("test.png", dpi=300)
 # %%
 plt.rcParams["font.family"]
 # %%
-plt.style.use(["default"])
-
 plt.rcParams["font.sans-serif"]
 # %%
 import matplotlib.pyplot as plt

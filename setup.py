@@ -25,13 +25,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/yourusername/EasyPlotLib",
     packages=setuptools.find_packages(),
-    package_data={
-        "EasyPlotLib": [
-            "font/*.ttf",
-            "styles/*.mplstyle",
-            "styles/journals/*",  # 如果 journals 目录下有文件也要包含的话
-        ],
-    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",

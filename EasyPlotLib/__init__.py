@@ -1,15 +1,15 @@
 import os
 import matplotlib.font_manager as fm
 import matplotlib.pyplot as plt
-import pkg_resources
 
 from .cartopy_helper import cartopy_plot_tickmarks
 from .figsizes_set import figsizes, subplot_labels
+import EasyPlotLib
 
-# 获取资源目录的路径，假设 'fonts' 和 'styles' 目录已经在你的包数据中
-font_dir = pkg_resources.resource_filename(__name__, "fonts")
-style_dir = pkg_resources.resource_filename(__name__, "styles")
-
+# register the bundled stylesheets in the matplotlib style library
+EasyPlotLib_path = EasyPlotLib.__path__[0]
+style_dir = os.path.join(EasyPlotLib_path, "styles")
+font_dir = os.path.join(EasyPlotLib_path, "fonts")
 # 加载字体
 font_files = fm.findSystemFonts(fontpaths=[font_dir])
 for font_file in font_files:
