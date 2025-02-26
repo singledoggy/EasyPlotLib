@@ -40,11 +40,12 @@ def figsizes(
     autolayout=False,
     tight_layout="tight",
     pad_inches=_PAD_INCHES,
+    gold_ratio=_GOLDEN_RATIO,
     ratio=1,
 ) -> dict:
     # set defaul inverted_aspect if nrows
     if nrows and ncols:
-        inverted_aspect_ratio = _GOLDEN_RATIO * nrows / ncols
+        inverted_aspect_ratio = gold_ratio * nrows / ncols
     width = _JOURNAL_SIZES[journal_key]
     if isinstance(width, tuple):  # handle case where width is a tuple
         width = width[0]
