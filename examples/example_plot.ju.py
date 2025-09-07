@@ -39,7 +39,7 @@ fig, axs = plt.subplots(
     subplot_kw={"projection": ccrs.PlateCarree()},
 )
 if nrows == 1 and ncols == 1:
-    axs = np.array([[axs]])
+    axs = np.array([axs])
 
 for n, ax in enumerate(axs.flatten()):
     china_map.plot(ax=ax, edgecolor="black", facecolor="none", linewidth=0.5)
