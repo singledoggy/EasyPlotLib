@@ -87,7 +87,10 @@ def subplot_labels(
     xycoords: str = "axes fraction",
     xytext: Tuple[float, float] = (+0.5, +1),
     textcoords: str = "offset fontsize",
-    fontsize: Union[str, int] = "medium",
+    # Journals (Nature/Science/Cell) set panel letters a, b, c to 8 pt bold —
+    # the one figure element allowed to exceed the 5-7 pt body text. Default to
+    # 8 pt rather than "medium" (= body size), which made labels too small.
+    fontsize: Union[str, int] = 8,
     verticalalignment: str = "top",
     family: str = "sans-serif",
     weight: str = "bold",
