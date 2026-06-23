@@ -7,7 +7,33 @@ import matplotlib.pyplot as plt
 import EasyPlotLib
 
 from .cartopy_helper import cartopy_plot_tickmarks
+from .export import save_pub
 from .figsizes_set import figsizes, subplot_labels
+from .helpers import journal_style
+from .palettes import (
+    COLORMAPS,
+    PALETTES,
+    SEMANTIC,
+    alpha_ramp,
+    get_palette,
+    set_palette,
+    shades,
+)
+
+__all__ = [
+    "cartopy_plot_tickmarks",
+    "figsizes",
+    "subplot_labels",
+    "journal_style",
+    "save_pub",
+    "PALETTES",
+    "SEMANTIC",
+    "COLORMAPS",
+    "get_palette",
+    "set_palette",
+    "alpha_ramp",
+    "shades",
+]
 
 # register the bundled stylesheets in the matplotlib style library
 EasyPlotLib_path = EasyPlotLib.__path__[0]
