@@ -33,7 +33,7 @@ _JOURNAL_SIZES = {
 
 def figsizes(
     journal_key,
-    inverted_aspect_ratio=1,
+    inverted_aspect_ratio=None,
     nrows=None,
     ncols=None,
     constrained_layout=True,
@@ -43,9 +43,15 @@ def figsizes(
     gold_ratio=_GOLDEN_RATIO,
     ratio=1,
 ) -> dict:
-    # set defaul inverted_aspect if nrows
-    if nrows and ncols:
-        inverted_aspect_ratio = gold_ratio * nrows / ncols
+    # Aspect = height / width. The journal key fixes only the column *width*;
+    # the aspect should suit the content, so an explicit ``inverted_aspect_ratio``
+    # always wins (use ~1 for square plots, >1 for tall ones). When it is left
+    # unset, default to the golden ratio, scaled by the grid shape if given.
+    if inverted_aspect_ratio is None:
+        if nrows and ncols:
+            inverted_aspect_ratio = gold_ratio * nrows / ncols
+        else:
+            inverted_aspect_ratio = gold_ratio
     width = _JOURNAL_SIZES[journal_key]
     if isinstance(width, tuple):  # handle case where width is a tuple
         width = width[0]
