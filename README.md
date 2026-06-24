@@ -75,6 +75,13 @@ draw from it):
   `COLORMAPS` — sequential for magnitude, diverging for signed values.
 - **Microscopy** → `imaging` accents (cyan/magenta) on a black background.
 
+## Examples
+
+[`examples/README.md`](examples/README.md) is an index of all worked examples
+(chart gallery, cartopy/China maps, WRF nested-domain maps) — match your task to
+a row and adapt that file rather than starting from scratch. Geoscience map
+helpers and the WRF study-area figure live there too.
+
 ## Chart-type gallery
 `examples/gallery.py` renders one publication-styled panel per common archetype.
 Every panel sources its colors from the abstracted API above, so a method keeps
