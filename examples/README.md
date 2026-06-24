@@ -6,14 +6,15 @@ a blank script. The `sci-figure` skill uses this index the same way.
 
 ```
 examples/
-├── gallery.py          charts — one publication panel per archetype
-├── gallery/*.png       rendered chart panels
-├── maps/               geoscience maps (cartopy + cnmaps + salem)
-│   ├── china_provinces.py
-│   ├── wrf_domain.py
+├── gallery.py              charts — one publication panel per archetype
+├── gallery/*.png           rendered chart panels
+├── maps/                   geoscience maps (cartopy + cnmaps + salem)
+│   ├── china_provinces.py      study-area map + South China Sea inset
+│   ├── wrf_domain.py           WRF nested domains from namelist.wps
 │   └── data/namelist.wps
-├── example_plot.ju.py  layout / basics (panels, sizing, mosaic)
-└── example_plot.ipynb  same, as a notebook
+└── layout/                 organizing multi-panel figures
+    ├── subplot_layouts.py      grids + mosaics, sized & labelled
+    └── subplot_layouts.ipynb   notebook companion
 ```
 
 ## Charts — `gallery.py`
@@ -40,29 +41,39 @@ Shared APIs: `journal_style`, `subplot_labels`, `save_pub`. Deps: numpy, matplot
 
 Geoscience base maps. **China admin boundaries always via `from cnmaps import
 get_adm_maps`** (`get_adm_maps(level="省", engine="geopandas")`) — never an ad-hoc
-`country.shp`. `cnmaps` returns lon/lat with no CRS tag, so call
-`.set_crs("EPSG:4326")` before reprojecting with salem.
+`country.shp`. The nine-dash line (南海九段线) ships inside the province set
+(cnmaps attaches the South China Sea islands to Hainan, reaching ~3.8°N), so the
+**bottom-right SCS inset draws the same `china_map`**. Add geometries with
+`ax.add_geometries(china_map.geometry, crs=PROJ, ...)`, which takes the CRS inline
+(cnmaps returns lon/lat untagged); for salem instead call `.set_crs("EPSG:4326")`.
 
 | Want… | Example | Stack | Deps |
 |---|---|---|---|
-| study-area map over China, drop your own data on top | [`china_provinces.py`](maps/china_provinces.py) → [png](maps/china_provinces.png) | cartopy axis + `cnmaps`; `cartopy_plot_tickmarks` for ticks | cartopy, cnmaps |
+| study-area map over China **with nine-dash-line inset** (bottom-right) | [`china_provinces.py`](maps/china_provinces.py) → [png](maps/china_provinces.png) | cartopy axis + `cnmaps`; `ax.inset_axes(...)` SCS inset; `cartopy_plot_tickmarks` for degree labels | cartopy, cnmaps |
 | WRF nested-domain / model-config map (D01, D02 …) | [`wrf_domain.py`](maps/wrf_domain.py) → [png](maps/wrf_domain.png) | `geogrid_simulator(namelist.wps)` → salem `Grid`/`Map`, Natural-Earth bg, `cnmaps` provinces | salem, cnmaps, shapely |
 
 <p align="center">
   <img src="maps/china_provinces.png" width="300">
   <img src="maps/wrf_domain.png" width="270"><br>
-  <sub><code>china_provinces.py</code> · <code>wrf_domain.py</code> (D01 + D02 nest)</sub>
+  <sub><code>china_provinces.py</code> (nine-dash inset) · <code>wrf_domain.py</code> (D01 + D02 nest)</sub>
 </p>
 
 Notes: salem's `set_rgb(natural_earth="hr")` downloads on first use (and the CDN
 can 406) — `"lr"` ships with salem and works offline. WRF namelists live in
 [`maps/data/`](maps/data).
 
-## Layout / basics — `example_plot.ju.py` · `example_plot.ipynb`
+## Layout — `layout/subplot_layouts.py`
 
-Multi-panel layout, journal column sizing, panel labels, `subplot_mosaic`, and a
-cartopy China map with clean ticks. APIs: `figsizes`, `subplot_labels`,
-`cartopy_plot_tickmarks`. Deps: cartopy, cnmaps.
+How to organize multi-panel figures so each panel is correctly shaped and
+labelled. Two patterns, each rendered to a PNG:
+
+| Pattern | When | Key call |
+|---|---|---|
+| regular grid ([`subplot_grid.png`](layout/subplot_grid.png)) | panels of equal size/role | `plt.subplots(nrows, ncols)` + matching `journal_style(nrows=, ncols=)` so each cell ≈ golden; share axes |
+| irregular mosaic ([`subplot_mosaic.png`](layout/subplot_mosaic.png)) | one hero panel + supporting ones | `plt.subplot_mosaic("AAB\nAAC")` |
+
+APIs: `journal_style`, `subplot_labels`, `save_pub`. Deps: numpy, matplotlib (no
+cartopy/cnmaps). `subplot_layouts.ipynb` is the notebook companion.
 
 ## Conventions worth copying
 
