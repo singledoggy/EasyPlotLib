@@ -13,8 +13,7 @@ examples/
 │   ├── wrf_domain.py           WRF nested domains from namelist.wps
 │   └── data/namelist.wps
 └── layout/                 organizing multi-panel figures
-    ├── subplot_layouts.py      grids + mosaics, sized & labelled
-    └── subplot_layouts.ipynb   notebook companion
+    └── subplot_layouts.py      grids + mosaics, sized & labelled
 ```
 
 ## Charts — `gallery.py`
@@ -76,7 +75,7 @@ labelled. Two patterns, each rendered to a PNG:
 | irregular mosaic ([`subplot_mosaic.png`](layout/subplot_mosaic.png)) | one hero panel + supporting ones | `plt.subplot_mosaic("AAB\nAAC")` |
 
 APIs: `journal_style`, `subplot_labels`, `save_pub`. Deps: numpy, matplotlib (no
-cartopy/cnmaps). `subplot_layouts.ipynb` is the notebook companion.
+cartopy/cnmaps).
 
 ## Conventions worth copying
 
