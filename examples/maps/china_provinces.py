@@ -42,6 +42,7 @@ Run::
 import os
 
 import cartopy.crs as ccrs
+from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -92,13 +93,14 @@ def main():
 
     ax.set_extent(EXTENTS_MAIN, crs=PROJ)
 
-    # lon/lat graticule + degree ticks on x and y (cartopy equivalent of salem's
-    # m.set_lonlat_contours(add_xtick=True, add_ytick=True, linewidth=0.4)).
-    gl = ax.gridlines(draw_labels=True, color="gray", linewidth=0.4,
-                      linestyle="dotted", transform=PROJ)
-    gl.top_labels = gl.right_labels = False
-    gl.rotate_labels = False
-    epl.cartopy_plot_tickmarks(ax, gl)
+    # Real lon/lat axis ticks with degree labels, owned by the matplotlib axes.
+    # (Don't use a cartopy gridliner for this: its redraw clips outward ticks
+    # unreliably, so they sometimes vanish.) Ticks point OUT to each lon/lat.
+    ax.set_xticks(np.arange(80, 131, 10), crs=PROJ)
+    ax.set_yticks(np.arange(20, 51, 10), crs=PROJ)
+    ax.xaxis.set_major_formatter(LongitudeFormatter())
+    ax.yaxis.set_major_formatter(LatitudeFormatter())
+    ax.tick_params(direction="out", length=5, width=0.6)
 
     # 3) Colourbar — placed by the layout engine, then clamped to the map height.
     cb = fig.colorbar(mesh, ax=ax, fraction=0.046, pad=0.02, aspect=30,
