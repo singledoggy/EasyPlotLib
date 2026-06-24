@@ -46,16 +46,19 @@ get_adm_maps`** (`get_adm_maps(level="省", engine="geopandas")`) — never an a
 **bottom-right SCS inset draws the same `china_map`**. Add geometries with
 `ax.add_geometries(china_map.geometry, crs=PROJ, ...)`, which takes the CRS inline
 (cnmaps returns lon/lat untagged); for salem instead call `.set_crs("EPSG:4326")`.
+To colour a **gridded field** only over land, clip the mesh to one fused boundary —
+`clip_pcolormesh_by_map(mesh, MapPolygon(prov.geometry.union_all()))` — and clamp the
+colourbar to the drawn map height (equal-aspect maps shrink inside their grid cell).
 
 | Want… | Example | Stack | Deps |
 |---|---|---|---|
-| study-area map over China **with nine-dash-line inset** (bottom-right) | [`china_provinces.py`](maps/china_provinces.py) → [png](maps/china_provinces.png) | cartopy axis + `cnmaps`; `ax.inset_axes(...)` SCS inset; `cartopy_plot_tickmarks` for degree labels | cartopy, cnmaps |
+| **colour-mapped field over China** (clipped to the outline) + colourbar + nine-dash-line inset | [`china_provinces.py`](maps/china_provinces.py) → [png](maps/china_provinces.png) | cartopy `pcolormesh(cmap=COLORMAPS["sequential"])` clipped via `clip_pcolormesh_by_map`; colourbar **clamped to the drawn map height** (equal-aspect maps shrink inside their cell — see `tests/test_map_aspect_colorbar.py`); `ax.inset_axes(...)` SCS inset; `cartopy_plot_tickmarks` for degree labels | cartopy, cnmaps |
 | WRF nested-domain / model-config map (D01, D02 …) | [`wrf_domain.py`](maps/wrf_domain.py) → [png](maps/wrf_domain.png) | `geogrid_simulator(namelist.wps)` → salem `Grid`/`Map`, Natural-Earth bg, `cnmaps` provinces | salem, cnmaps, shapely |
 
 <p align="center">
   <img src="maps/china_provinces.png" width="300">
   <img src="maps/wrf_domain.png" width="270"><br>
-  <sub><code>china_provinces.py</code> (nine-dash inset) · <code>wrf_domain.py</code> (D01 + D02 nest)</sub>
+  <sub><code>china_provinces.py</code> (clipped colour field + nine-dash inset) · <code>wrf_domain.py</code> (D01 + D02 nest)</sub>
 </p>
 
 Notes: salem's `set_rgb(natural_earth="hr")` downloads on first use (and the CDN
