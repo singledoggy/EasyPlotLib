@@ -9,7 +9,12 @@ match the task to a row, open that file, adapt it.
 | [`gallery.py`](gallery.py) → [`gallery/`](gallery) | One publication panel per common chart archetype (bars, ablation, trend+CI, heatmap, scatter, radar, violin/box, forest, stacked area). The reference for **color consistency**. | `journal_style`, `get_palette`, `SEMANTIC`, `shades`, `alpha_ramp`, `COLORMAPS`, `subplot_labels`, `save_pub` | numpy, matplotlib |
 | [`example_plot.ju.py`](example_plot.ju.py) | Basics: multi-panel layout, journal figure sizing, panel labels, cartopy China maps with clean lon/lat ticks, `subplot_mosaic`. | `figsizes`, `subplot_labels`, `cartopy_plot_tickmarks` | cartopy, cnmaps |
 | [`example_plot.ipynb`](example_plot.ipynb) | Notebook walkthrough of the same basics. | as above | cartopy, cnmaps |
-| [`wrf_domain.py`](wrf_domain.py) | **WRF nested-domain / study-area map.** Parses `namelist.wps` (geogrid.exe emulator), draws parent + nest boxes (D01, D02 …) on a projected map with a Natural-Earth background and Chinese province boundaries. | `journal_style`, `save_pub`; salem `Grid`/`Map`; `cnmaps.get_adm_maps` | salem, cnmaps, shapely |
+| [`wrf_domain.py`](wrf_domain.py) → [`wrf_domain.png`](wrf_domain.png) | **WRF nested-domain / study-area map.** Parses `namelist.wps` (geogrid.exe emulator), draws parent + nest boxes (D01, D02 …) on a projected map with a Natural-Earth background and Chinese province boundaries. | `journal_style`, `save_pub`; salem `Grid`/`Map`; `cnmaps.get_adm_maps` | salem, cnmaps, shapely |
+
+<p align="center">
+  <img src="wrf_domain.png" width="360"><br>
+  <sub><code>wrf_domain.py</code> — parent D01 (15 km Lambert) + D02 nest, cnmaps provinces.</sub>
+</p>
 
 ## Conventions worth copying
 

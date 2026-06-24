@@ -231,13 +231,20 @@ def main():
     fig, ax = plt.subplots()
 
     m = maps[0]
-    m.set_rgb(natural_earth="hr")  # shaded relief / land-cover background
+    # Shaded-relief / land-cover background. "lr" ships with salem (offline);
+    # "hr"/"mr" are higher-res but download on first use.
+    try:
+        m.set_rgb(natural_earth="lr")
+    except Exception as exc:  # network / data issue — keep a plain background
+        print(f"natural_earth background unavailable ({exc}); plotting without it.")
 
     # China province boundaries from cnmaps (correct national outline).
     try:
         from cnmaps import get_adm_maps
 
         china = get_adm_maps(level="省", engine="geopandas")
+        if china.crs is None:  # cnmaps returns lon/lat without a CRS tag
+            china = china.set_crs("EPSG:4326")
         m.set_shapefile(
             shape=china, edgecolor="black", facecolor="none", linewidth=0.4
         )

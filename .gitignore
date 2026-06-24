@@ -210,3 +210,6 @@ pyrightconfig.json
 
 # Test output figures
 tests/*.png
+
+# Example build artifacts (vector exports)
+examples/*.pdf
