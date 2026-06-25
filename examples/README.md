@@ -11,7 +11,8 @@ examples/
 ├── maps/                   geoscience maps (cartopy + cnmaps + salem)
 │   ├── china_provinces.py      study-area map + South China Sea inset
 │   ├── wrf_domain.py           WRF nested domains from namelist.wps
-│   └── data/namelist.wps
+│   ├── wrf_field.py            WRF output field on its native CRS (cached)
+│   └── data/                   namelist.wps · sample wrfout · xy_coord.pkl cache
 └── layout/                 organizing multi-panel figures
     └── subplot_layouts.py      grids + mosaics, sized & labelled
 ```
@@ -53,6 +54,7 @@ colourbar to the drawn map height (equal-aspect maps shrink inside their grid ce
 |---|---|---|---|
 | **colour-mapped field over China** (clipped to the outline) + colourbar + nine-dash-line inset | [`china_provinces.py`](maps/china_provinces.py) → [png](maps/china_provinces.png) | cartopy `pcolormesh(cmap=COLORMAPS["sequential"])` clipped via `clip_pcolormesh_by_map`; colourbar **clamped to the drawn map height** (equal-aspect maps shrink inside their cell — see `tests/test_map_aspect_colorbar.py`); `ax.inset_axes(...)` SCS inset; `cartopy_plot_tickmarks` for degree labels | cartopy, cnmaps |
 | WRF nested-domain / model-config map (D01, D02 …) | [`wrf_domain.py`](maps/wrf_domain.py) → [png](maps/wrf_domain.png) | `geogrid_simulator(namelist.wps)` → salem `Grid`/`Map`, Natural-Earth bg, `cnmaps` provinces | salem, cnmaps, shapely |
+| **WRF output field on its native projection** (temperature + precip) | [`wrf_field.py`](maps/wrf_field.py) → [png](maps/wrf_field.png) | extract CRS once from a `wrfout` with `salem.open_wrf_dataset(...)[["south_north","west_east"]]`, **pickle as a cache**, reload + `xy_coord.salem.cartopy()` → the projection for every `subplot_kw`; field arrays are on the native grid so `transform` IS that projection; per-panel colourbar + `gridlines(draw_labels=True)` | salem, cartopy |
 
 <p align="center">
   <img src="maps/china_provinces.png" width="300">
@@ -80,8 +82,10 @@ cartopy/cnmaps).
 ## Conventions worth copying
 
 - **Sizing + style in one call:** `epl.journal_style(key, base_style="nature",
-  nrows=, ncols=, ratio=/inverted_aspect_ratio=)`. Width keys: `nat1/2`,
-  `aaas1/2`, `pnas1..3`, `agu1..4`, `ams1..4`.
+  nrows=, ncols=, inverted_aspect_ratio=)` — `inverted_aspect_ratio` (height÷width)
+  sets the figure *shape*; `nrows/ncols` keep each cell ≈ golden. **Leave `ratio`
+  alone:** it only scales the whole figure size (aspect unchanged) and is rarely
+  what you want. Width keys: `nat1/2`, `aaas1/2`, `pnas1..3`, `agu1..4`, `ams1..4`.
 - **Colour by meaning, not index** — `SEMANTIC` (blue=hero, grey=baseline); one
   restrained palette per figure. See `gallery.py` + root README "Color scheme".
 - **Panel labels:** `ax.annotate(**epl.subplot_labels(n, "a"))` (8 pt bold).
