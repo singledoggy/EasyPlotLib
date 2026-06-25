@@ -46,6 +46,9 @@ epl.save_pub(fig, "figures/fig1", formats=("pdf", "png"))
 | `journal_style(key, palette=, base_style=, nrows=, ncols=, apply=)` | Apply style + size + palette in one call. Returns the figsize dict. |
 | `figsizes(key, ...)` | rcParams dict with a journal column figure size. Keys: `nat1/2`, `aaas1/2`, `pnas1..3`, `agu1..4`, `ams1..4`. |
 | `subplot_labels(n, style)` | Args for `ax.annotate(**...)`. Styles: `a`, `A`, `(a)`, `a)`, `a.` |
+| `geo_aspect(lon0, lon1, lat0, lat1)` | Display aspect (w/h) of an equal-aspect lon/lat map: `Δlon·cos(lat)/Δlat`. Feed to `row_layout` / `width_ratios`. |
+| `row_layout(aspects, vmargin=)` | For a 1-row map/plot mix: derive `width_ratios` (∝ aspect → equal heights) + a safe `inverted_aspect_ratio` so every panel fills its column. |
+| `clamp_colorbars(fig, (ax, cb), ...)` | Clamp each `ax=`-attached colourbar's height to its (equal-aspect) panel instead of the taller cell. |
 | `set_palette(name, ax=None)` / `get_palette(name, n=)` | Set the color cycle / return raw hex list. |
 | `PALETTES` | Qualitative palettes: `nature`, `science`, `nejm`, `lancet`, `jama`, `muted`, `semantic`, `nmi`, `comparison`, `imaging`, `bright`. |
 | `SEMANTIC` | Role-based colors (`blue_main`=hero, `green_strong`=gain, `red_strong`=drop, `delta_up/down`, neutrals, accents). |

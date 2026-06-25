@@ -48,7 +48,9 @@ get_adm_maps`** (`get_adm_maps(level="省", engine="geopandas")`) — never an a
 (cnmaps returns lon/lat untagged); for salem instead call `.set_crs("EPSG:4326")`.
 To colour a **gridded field** only over land, clip the mesh to one fused boundary —
 `clip_pcolormesh_by_map(mesh, MapPolygon(prov.geometry.union_all()))` — and clamp the
-colourbar to the drawn map height (equal-aspect maps shrink inside their grid cell).
+colourbar to the drawn map height (equal-aspect maps shrink inside their grid cell)
+with `epl.clamp_colorbars(fig, (ax, cb))`. For a multi-map row, size the figure
+from the panels' aspects with `epl.geo_aspect` + `epl.row_layout` (see *Conventions*).
 
 | Want… | Example | Stack | Deps |
 |---|---|---|---|
@@ -86,6 +88,14 @@ cartopy/cnmaps).
   sets the figure *shape*; `nrows/ncols` keep each cell ≈ golden. **Leave `ratio`
   alone:** it only scales the whole figure size (aspect unchanged) and is rarely
   what you want. Width keys: `nat1/2`, `aaas1/2`, `pnas1..3`, `agu1..4`, `ams1..4`.
+- **A row of maps / equal-aspect panels — derive the shape, don't hand-tune it.**
+  `asp = [epl.geo_aspect(lon0, lon1, lat0, lat1), …, 1.0]` (1.0 = a square panel)
+  → `lay = epl.row_layout(asp)`; pass `lay["inverted_aspect_ratio"]` to
+  `journal_style` and `lay["width_ratios"]` to `plt.subplots(gridspec_kw=)`. This
+  makes `width_ratios` ∝ aspect (every panel the same height) and the figure tall
+  enough that each panel fills its column (no inter-panel gaps). For `ax=`-attached
+  colourbars on equal-aspect panels, finish with `epl.clamp_colorbars(fig, (ax,
+  cb), …)` so each bar matches its panel height. (Regression: `tests/test_row_layout.py`.)
 - **Colour by meaning, not index** — `SEMANTIC` (blue=hero, grey=baseline); one
   restrained palette per figure. See `gallery.py` + root README "Color scheme".
 - **Panel labels:** `ax.annotate(**epl.subplot_labels(n, "a"))` (8 pt bold).

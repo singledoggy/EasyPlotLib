@@ -10,6 +10,7 @@ from .cartopy_helper import cartopy_plot_tickmarks
 from .export import save_pub
 from .figsizes_set import figsizes, subplot_labels
 from .helpers import journal_style
+from .layout import clamp_colorbars, geo_aspect, row_layout
 from .palettes import (
     COLORMAPS,
     PALETTES,
@@ -25,6 +26,9 @@ __all__ = [
     "figsizes",
     "subplot_labels",
     "journal_style",
+    "geo_aspect",
+    "row_layout",
+    "clamp_colorbars",
     "save_pub",
     "PALETTES",
     "SEMANTIC",
