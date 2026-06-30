@@ -13,6 +13,7 @@ examples/
 │   ├── wrf_domain.py           WRF nested domains from namelist.wps
 │   ├── wrf_field.py            WRF output field on its native CRS (cached)
 │   ├── wrf_cross_section.py    WRF vertical cross section (vertcross + terrain)
+│   ├── multirow_map_grid.py    multi-row equal-aspect map grid + edge cbars + bar row
 │   └── data/                   namelist.wps · sample wrfout · xy_coord.pkl cache
 └── layout/                 organizing multi-panel figures
     └── subplot_layouts.py      grids + mosaics, sized & labelled
@@ -59,11 +60,14 @@ from the panels' aspects with `epl.geo_aspect` + `epl.row_layout` (see *Conventi
 | WRF nested-domain / model-config map (D01, D02 …) | [`wrf_domain.py`](maps/wrf_domain.py) → [png](maps/wrf_domain.png) | `geogrid_simulator(namelist.wps)` → salem `Grid`/`Map`, Natural-Earth bg, `cnmaps` provinces | salem, cnmaps, shapely |
 | **WRF output field on its native projection** (temperature + precip) | [`wrf_field.py`](maps/wrf_field.py) → [png](maps/wrf_field.png) | extract CRS once from a `wrfout` with `salem.open_wrf_dataset(...)[["south_north","west_east"]]`, **pickle as a cache**, reload + `xy_coord.salem.cartopy()` → the projection for every `subplot_kw`; field arrays are on the native grid so `transform` IS that projection; per-panel colourbar + `gridlines(draw_labels=True)` | salem, cartopy |
 | **WRF vertical cross section** (θ + circulation, RH) along a lat-lon transect | [`wrf_cross_section.py`](maps/wrf_cross_section.py) → [png](maps/wrf_cross_section.png) | `wrf.vertcross(field, z, wrfin, start_point, end_point, latlon=True)` interpolates a 3-D field onto the vertical plane, **time-averaged** over `ALL_TIMES`; `xy_loc` coord → lat/lon x-ticks; project `(ua,va)` onto the section azimuth for an in-plane wind quiver (w exaggerated) with a top-right **`quiverkey` reference arrow** labelling m/s; `interpline(ter, …)` + `fill_between` for terrain, back-filling the sub-surface NaNs so shading meets the ground; horizontal under-panel colourbars with a small `pad` (adaptive gap, see *Conventions*) | wrf-python, netCDF4 |
+| **multi-row grid of equal-aspect maps** (2 periods × A/B/Δ) + a bar row | [`multirow_map_grid.py`](maps/multirow_map_grid.py) → [png](maps/multirow_map_grid.png) | the case `row_layout` does **not** cover. Maps **in the WRF native (Lambert) projection**: axes `projection=` the model CRS read from a wrfout (`ds[["south_north","west_east"]].salem.cartopy()`), and the field is plotted on the grid's **own projected x/y metres** (`grid.xy_coordinates`) with `transform=wrf_proj` — data is **not** reprojected to lon/lat; only vector overlays + gridliner labels are (`set_xticks` is PlateCarree/Mercator-only). `hspace` can't close the gap between map rows (equal-aspect maps shrink & centre in their cells) → let constrained layout solve **X only**, freeze, then **restack rows by hand keeping each map's drawn w/h** (change only `y0`); **shared colourbars at the figure EDGES** (sequential left, diverging right) so rotated labels never land on a neighbouring map, each clamped to span both rows; reserve `LAT_PAD` so a left cbar clears the lat labels; silence the benign `constrained_layout … collapsed to zero` warning; all-synthetic so it runs anywhere (see skill §7a) | cartopy, cnmaps |
 
 <p align="center">
   <img src="maps/china_provinces.png" width="300">
   <img src="maps/wrf_domain.png" width="270"><br>
-  <sub><code>china_provinces.py</code> (clipped colour field + nine-dash inset) · <code>wrf_domain.py</code> (D01 + D02 nest)</sub>
+  <sub><code>china_provinces.py</code> (clipped colour field + nine-dash inset) · <code>wrf_domain.py</code> (D01 + D02 nest)</sub><br>
+  <img src="maps/multirow_map_grid.png" width="420"><br>
+  <sub><code>multirow_map_grid.py</code> (2 map rows + edge colourbars + bar row, hand-restacked)</sub>
 </p>
 
 Notes: salem's `set_rgb(natural_earth="hr")` downloads on first use (and the CDN
