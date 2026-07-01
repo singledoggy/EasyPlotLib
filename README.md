@@ -3,13 +3,6 @@
 Matplotlib styles and helpers for publication-quality SCI-journal figures
 (Nature / Science / Cell / NEJM / Lancet / PNAS / AGU / AMS).
 
-<p align="center">
-  <img src="examples/gallery/01_bar_comparison.png" height="150">
-  <img src="examples/gallery/03_line_trend.png" height="150">
-  <img src="examples/gallery/07_distributions.png" height="150">
-</p>
-<p align="center"><sub>Built with the bundled <code>nature</code> style — see the full <a href="#chart-type-gallery">gallery</a>.</sub></p>
-
 ## Install
 
 ```
@@ -60,8 +53,7 @@ epl.save_pub(fig, "figures/fig1", formats=("pdf", "png"))
 
 ## Color scheme guidance
 Every recurring nature-style color pattern is abstracted into one small, shared
-API so a whole figure stays consistent (the `examples/gallery.py` panels all
-draw from it):
+API so a whole figure stays consistent:
 
 - **One restrained palette per figure.** Use a unified family across panels
   rather than maximizing hue variety; reduce saturation before adding categories.
@@ -78,40 +70,6 @@ draw from it):
   `COLORMAPS` — sequential for magnitude, diverging for signed values.
 - **Microscopy** → `imaging` accents (cyan/magenta) on a black background.
 
-## Examples
-
-[`examples/README.md`](examples/README.md) is an index of all worked examples
-(chart gallery, cartopy/China maps, WRF nested-domain maps) — match your task to
-a row and adapt that file rather than starting from scratch. Geoscience map
-helpers and the WRF study-area figure live there too.
-
-## Chart-type gallery
-`examples/gallery.py` renders one publication-styled panel per common archetype.
-Every panel sources its colors from the abstracted API above, so a method keeps
-its hue across the whole figure (blue = hero, grey = baseline):
-
-```
-python examples/gallery.py   # writes PNGs to examples/gallery/
-```
-
-<table>
-  <tr>
-    <td align="center"><img src="examples/gallery/01_bar_comparison.png" width="260"><br><sub>Method comparison · <code>get_palette("comparison")</code></sub></td>
-    <td align="center"><img src="examples/gallery/02_bar_ablation.png" width="260"><br><sub>Ablation · <code>alpha_ramp()</code></sub></td>
-    <td align="center"><img src="examples/gallery/03_line_trend.png" width="260"><br><sub>Trend + CI · <code>SEMANTIC</code></sub></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="examples/gallery/04_heatmap.png" width="260"><br><sub>Heatmap · <code>COLORMAPS["sequential"]</code></sub></td>
-    <td align="center"><img src="examples/gallery/05_scatter_bubble.png" width="260"><br><sub>Scatter / bubble · <code>SEMANTIC</code></sub></td>
-    <td align="center"><img src="examples/gallery/06_radar.png" width="260"><br><sub>Radar / polar · <code>SEMANTIC</code></sub></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="examples/gallery/07_distributions.png" width="260"><br><sub>Violin + box · <code>shades()</code></sub></td>
-    <td align="center"><img src="examples/gallery/08_forest.png" width="260"><br><sub>Forest / interval · <code>SEMANTIC</code></sub></td>
-    <td align="center"><img src="examples/gallery/09_stacked_area.png" width="260"><br><sub>Stacked area · <code>shades()</code></sub></td>
-  </tr>
-</table>
-
 ## Style notes
 
 The bundled `nature` style uses 7 pt sans (TeX Gyre Heros / Helvetica), an open
@@ -122,4 +80,7 @@ Illustrator/Inkscape (`pdf.fonttype=42`, `svg.fonttype=none`) at 600 dpi.
 
 A personal `sci-figure` skill (`~/.claude/skills/sci-figure/`) walks Claude
 through the publication workflow and is auto-invoked on plotting tasks in any
-project where EasyPlotLib is installed.
+project where EasyPlotLib is installed. This repo ships only the core helper
+library; the worked examples (chart gallery, cartopy/China maps, WRF
+nested-domain maps, layout grids) and their index live in that skill's
+`examples/` folder, not here.
