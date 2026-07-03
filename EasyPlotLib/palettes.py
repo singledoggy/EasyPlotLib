@@ -162,6 +162,68 @@ def shades(color: str, n: int, light: float = 0.82) -> List[str]:
     return out
 
 
+def focal_palette(labels, focal, focal_color, other="muted", base_colors=None):
+    """Map ``labels`` → colours with the focal series visually dominant (§4.2).
+
+    Once a figure compares one focal series (your method, the perturbed
+    condition) against others, the focal series should be saturated and heavy
+    while the comparators recede — colour carries the emphasis, not a callout.
+
+    Parameters
+    ----------
+    labels:
+        The series labels, in draw order.
+    focal:
+        The focal label (str) or a set/list of focal labels.
+    focal_color:
+        The saturated hue for the focal series (e.g. ``SEMANTIC["blue_main"]``).
+    other:
+        How to render the non-focal series:
+
+        - ``"muted"``   — desaturate ``base_colors`` (or the current cycle) toward grey.
+        - ``"grey"``    — a uniform light grey for all non-focal series.
+        - ``"ordinal"`` — non-focal on a single light→dark grey ramp (input order).
+    base_colors:
+        Optional base hue list for ``"muted"``; defaults to the rcParams cycle.
+
+    Returns
+    -------
+    list
+        One colour per label, aligned with ``labels``.
+    """
+    focal_set = {focal} if isinstance(focal, str) else set(focal)
+    n = len(labels)
+    if not focal_set & set(labels):
+        raise ValueError(f"focal {focal!r} not found in labels")
+    if base_colors is None:
+        base_colors = plt.rcParams["axes.prop_cycle"].by_key().get("color", ["#444444"])
+    base_colors = [base_colors[i % len(base_colors)] for i in range(n)]
+    if other == "grey":
+        rest = ["#BCBCBC"] * n
+    elif other == "ordinal":
+        nf = max(1, n - len(focal_set))
+        ramp = [
+            mcolors.to_hex((v, v, v))
+            for v in ([0.55] if nf == 1 else [0.80 - 0.35 * i / (nf - 1) for i in range(nf)])
+        ]
+        rest, k = [], 0
+        for lab in labels:
+            rest.append(ramp[min(k, nf - 1)])
+            k += lab not in focal_set
+    elif other == "muted":
+        def mute(c):
+            r, g, b = mcolors.to_rgb(c)
+            m = (r + g + b) / 3
+            return mcolors.to_hex(
+                (0.3 * r + 0.7 * m, 0.3 * g + 0.7 * m, 0.3 * b + 0.7 * m)
+            )
+
+        rest = [mute(c) for c in base_colors]
+    else:
+        raise ValueError(f"other must be 'muted'|'grey'|'ordinal', got {other!r}")
+    return [focal_color if lab in focal_set else rest[i] for i, lab in enumerate(labels)]
+
+
 def set_palette(name: str = DEFAULT_PALETTE, ax: Optional[Axes] = None) -> List[str]:
     """Set the qualitative color cycle to ``name``.
 

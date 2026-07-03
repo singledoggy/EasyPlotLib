@@ -7,8 +7,26 @@ import matplotlib.pyplot as plt
 import EasyPlotLib
 
 from .cartopy_helper import cartopy_plot_tickmarks
+from .compose import (
+    apply_outline_revisions,
+    compose_crops,
+    compose_figure,
+    figure_outline_schema,
+    grid_geom,
+    panel_px,
+    panel_xy,
+)
 from .export import save_pub
 from .figsizes_set import figsizes, subplot_labels
+from .figure_style import (
+    bar_with_points,
+    end_of_line_labels,
+    goodness_arrow,
+    panel_crops,
+    set_frame,
+    strip_with_median,
+    two_tier_label,
+)
 from .helpers import journal_style
 from .layout import clamp_colorbars, geo_aspect, row_layout
 from .palettes import (
@@ -16,6 +34,7 @@ from .palettes import (
     PALETTES,
     SEMANTIC,
     alpha_ramp,
+    focal_palette,
     get_palette,
     set_palette,
     shades,
@@ -35,8 +54,25 @@ __all__ = [
     "COLORMAPS",
     "get_palette",
     "set_palette",
+    "focal_palette",
     "alpha_ramp",
     "shades",
+    # figure-style toolkit (correctness & legibility helpers)
+    "set_frame",
+    "bar_with_points",
+    "strip_with_median",
+    "goodness_arrow",
+    "end_of_line_labels",
+    "two_tier_label",
+    "panel_crops",
+    # multi-panel composition (figure-composer geometry)
+    "figure_outline_schema",
+    "grid_geom",
+    "panel_px",
+    "panel_xy",
+    "compose_figure",
+    "compose_crops",
+    "apply_outline_revisions",
 ]
 
 # register the bundled stylesheets in the matplotlib style library
