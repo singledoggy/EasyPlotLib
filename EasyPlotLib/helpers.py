@@ -44,6 +44,14 @@ def journal_style(
     dict
         The figure-size rcParams dict (the return value of ``figsizes``), handy
         to splice into ``plt.rcParams.update`` or ``plt.style.context``.
+
+    Notes
+    -----
+    This enables **constrained layout** (``figure.constrained_layout.use``) for
+    every subsequent figure. Do not call ``fig.subplots_adjust()`` or
+    ``plt.tight_layout()`` on such a figure — matplotlib drops the layout
+    engine and spacing degrades. Tune panel spacing through the engine:
+    ``fig.get_layout_engine().set(wspace=..., hspace=...)``.
     """
     fs = figsizes(journal_key, nrows=nrows, ncols=ncols, **figsize_kwargs)
     if apply:

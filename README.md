@@ -75,6 +75,7 @@ epl.save_pub(fig, "figures/fig1", formats=("pdf", "png"))
 | `apply_outline_revisions(outline, revisions)` | Set of panel letters to regenerate after figure-level review revisions. |
 
 ## Color scheme guidance
+
 Every recurring nature-style color pattern is abstracted into one small, shared
 API so a whole figure stays consistent:
 
@@ -98,6 +99,11 @@ API so a whole figure stays consistent:
 The bundled `nature` style uses 7 pt sans (TeX Gyre Heros / Helvetica), an open
 frame (no top/right spines), and export settings that keep text **editable** in
 Illustrator/Inkscape (`pdf.fonttype=42`, `svg.fonttype=none`) at 600 dpi.
+
+`journal_style` / `figsizes` enable **constrained layout** for every figure.
+Never call `fig.subplots_adjust()` or `plt.tight_layout()` on top of it —
+matplotlib drops the layout engine and spacing degrades. Tune panel spacing
+with `fig.get_layout_engine().set(wspace=..., hspace=...)` instead.
 
 ## Claude Code skill
 
